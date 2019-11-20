@@ -11,6 +11,12 @@ import time
 import random
 
 
+def show_alien(aliens):
+    for alien_number in range(len(aliens)):
+        if aliens[alien_number].x < 0:
+           aliens[alien_number].move(random.randint(0 + constants.SPRITE_SIZE, constants.SCREEN_X - constants.SPRITE_SIZE), constants.OFF_TOP_SCREEN)
+           break
+
 def splash_scene():
     # this function is the splash scene game loop
 
@@ -149,9 +155,18 @@ def game_scene():
         single_laser = stage.Sprite(image_bank_1, 10, constants.OFF_SCREEN_X,
                                     constants.OFF_SCREEN_Y)
         lasers.append(single_laser)
+    # load aliens
+    aliens = []
+    for alien_number in range(constants.TOTAL_NUMBER_OF_ALIENS):
+        single_alien = stage.Sprite(image_bank_1, 9, constants.OFF_SCREEN_X,
+                                    constants.OFF_SCREEN_Y)
+        aliens.append(single_alien)
+    # number of aliens moving down
+    alien_count = 1
+    show_alien(aliens)
     # set game configurations
     game = stage.Stage(ugame.display, constants.FPS)
-    game.layers = sprites + lasers + [background]
+    game.layers = sprites + lasers + aliens + [background]
     game.render_block()
 
     while True:
@@ -196,7 +211,13 @@ def game_scene():
                 if lasers[laser_number].y < constants.OFF_SCREEN_Y:
                     lasers[laser_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
 
-        game.render_sprites(sprites + lasers)
+        for alien_number in range(len(aliens)):
+            if aliens[alien_number].x > 0:
+                aliens[alien_number].move(aliens[alien_number].x, aliens[alien_number].y + constants.ALIEN_SPEED)
+                if aliens[alien_number].y > constants.SCREEN_Y:
+                    aliens[alien_number].move(constants.OFF_SCREEN_X, constants.OFF_SCREEN_Y)
+                    show_alien(aliens)
+        game.render_sprites(sprites + lasers + aliens)
         game.tick()  # wait until refresh rate finishes
 
 
