@@ -173,13 +173,13 @@ def game_scene():
             if ship.x > constants.SCREEN_X - constants.SPRITE_SIZE:
                 ship.move(constants.SCREEN_X - constants.SPRITE_SIZE, ship.y)
             else:
-                ship.move(ship.x + 1, ship.y)
+                ship.move(ship.x + 3, ship.y)
 
         if keys & ugame.K_LEFT != 0:
             if ship.x < 0:
                 ship.move(0, ship.y)
             else:
-                ship.move(ship.x - 1, ship.y)
+                ship.move(ship.x - 3, ship.y)
 
         if a_button == constants.button_state["button_just_pressed"]:
             for laser_number in range(len(lasers)):
